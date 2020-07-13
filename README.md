@@ -120,3 +120,5 @@ url = f"http://localhost:3000/recomendation/{character}"
 res = requests.get(url)
 
 ```
+
+For detailed explanation, check the files.
