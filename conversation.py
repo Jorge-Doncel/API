@@ -26,8 +26,12 @@ def create_user(name):
 def create_chat():
     chat_participants= request.args.getlist("participants")
     conver_name= request.args.get("chat_name")
-    add_participants = db.conversation.insert({"conversation_name":conver_name, "participants": chat_participants}) 
-    return dumps(f'New chat create! Conversation id: {add_participants}')
+    check_conver= list(db.conversation.find({"conversation_name":conver_name}))
+    if len(check_conver) > 0:
+        raise ValueError ("This chat was already added")
+    else:
+        add_participants = db.conversation.insert({"conversation_name":conver_name, "participants": chat_participants}) 
+        return dumps(f'New chat create! Conversation id: {add_participants}')
 
 @app.route("/chat/<conversation_id>/adduser")
 def add_user(conversation_id):
