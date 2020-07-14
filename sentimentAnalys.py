@@ -15,6 +15,9 @@ sia = SentimentIntensityAnalyzer()
 
 @app.route("/chat/<conversation_id>/sentiment")
 def sentiment(conversation_id):
+    """
+    Get sentiments of all messages and user in a conversation
+    """
     messages = list(db.chatItem.find({"conversation_id": ObjectId(conversation_id)},{"_id":0,"message":"1", "user_id":1}))
     if len(messages) == 0:
         raise ValueError ("Conversation id don't find. Please, introduce it again")
@@ -23,6 +26,9 @@ def sentiment(conversation_id):
 
 @app.route("/chat/<conversation_id>/sentiment/<name>")
 def sentiment_character(conversation_id, name):
+    """
+    Get sentiments of a user in a conversation
+    """
     messages = list(db.chatItem.find({"conversation_id": ObjectId(conversation_id), "user_id": name},{"_id":0,"user_id":1,"message":"1"}))
     if len(messages) == 0:
         raise ValueError ("Name or conversation id don't find. Please, introduce it again")
@@ -31,6 +37,9 @@ def sentiment_character(conversation_id, name):
 
 @app.route("/chat/<conversation_id>/sentiment/<name>/total")
 def sentiment_character_total(conversation_id, name):
+    """
+    Get the sum of sentiments of a user in a conversation
+    """
     messages = list(db.chatItem.find({"conversation_id": ObjectId(conversation_id), "user_id": name},{"_id":0,"message":"1"}))
     if len(messages) == 0:
         raise ValueError ("Name or conversation id don't find. Please, introduce it again")
@@ -41,6 +50,9 @@ def sentiment_character_total(conversation_id, name):
 
 @app.route("/chat/sentiment/<name>")
 def sentiment_character_allSeasons(name):
+    """
+    Get sentiments of a user in all the messages the user has
+    """
     messages_name1 = list(db.chatItem.find({"user_id": name},{"_id":0,"message":"1"}))
     if len(messages_name1) == 0:
         raise ValueError ("Name don't find. Please, introduce it again")
@@ -51,6 +63,9 @@ def sentiment_character_allSeasons(name):
 
 @app.route("/chat/sentiment/<name1>/<name2>")
 def sentiment_compare(name1, name2):
+    """
+    Compare 2 user sentiments across all messages
+    """
     messages_name1 = list(db.chatItem.find({"user_id": name1},{"_id":0,"message":"1"}))
     messages_name2 = list(db.chatItem.find({"user_id": name2},{"_id":0,"message":"1"}))
     if len(messages_name1) == 0:

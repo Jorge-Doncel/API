@@ -17,6 +17,10 @@ db = client.get_default_database()
 message= list(db.chatItem.find({},{"_id":0, "user_id": 1,"message":1}))
 
 def create_dict():
+"""
+Create a dictionary where the key is the name of the character
+and the value is all the conversations of the character
+"""
     vacio={}
     for i in message:
         vacio[i["user_id"]] = vacio.get(i["user_id"], [])+ [i["message"]]
@@ -28,6 +32,11 @@ def create_dict():
 
 @app.route("/recomendation/<name>")
 def recomendation(name):
+"""
+Return 3 similars character to the one we introduce
+
+"""
+
     all_messages= create_dict()
     count_vectorizer = CountVectorizer()
     sparse_matrix = count_vectorizer.fit_transform(all_messages.values())
